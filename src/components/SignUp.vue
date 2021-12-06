@@ -111,7 +111,7 @@ export default {
 .container_signUp_user {
   border: 3px solid #283747;
   border-radius: 10px;
-  width: 25%;
+  min-width: 25%;
   height: 60%;
 
   display: flex;

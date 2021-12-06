@@ -77,7 +77,7 @@ export default {
 .logIn_user {
   margin: 0;
   padding: 0%;
-  height: 100%;
+  height: 75vh;
   width: 100%;
 
   display: flex;
@@ -88,7 +88,7 @@ export default {
 .container_logIn_user {
   border: 3px solid #283747;
   border-radius: 10px;
-  width: 25%;
+  min-width: 25%;
   height: 60%;
 
   display: flex;

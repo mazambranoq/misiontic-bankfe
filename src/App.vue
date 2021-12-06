@@ -7,6 +7,7 @@
       <nav>
         <button v-if="is_auth" v-on:click="loadHome"> Inicio </button>
         <button v-if="is_auth" v-on:click="loadAccount"> Cuenta </button>
+        <button v-if="is_auth" v-on:click="loadTransaction"> Transacción </button>
         <button v-if="is_auth" v-on:click="logOut"> Cerrar Sesión </button>
         <button v-if="!is_auth" v-on:click="loadLogIn" > Iniciar Sesión </button>
         <button v-if="!is_auth" v-on:click="loadSignUp" > Registrarse </button>
@@ -44,18 +45,19 @@ export default {
       }
   },
 
+  computed: {
+    is_auth: {
+      get: function(){
+        return this.$route.meta.requiresAuth;
+      },
+      set: function() { }
+    }
+  },
+
   components: {
   },
 
   methods:{
-    verifyAuth: function() {
-      this.is_auth = localStorage.getItem("isAuth") || false;
-		
-			if (this.is_auth == false)
-        this.$router.push({ name: "logIn" });
-      else
-        this.$router.push({ name: "home" });
-    },
 
     loadLogIn: function(){
       this.$router.push({name: "logIn"})
@@ -71,7 +73,7 @@ export default {
 			localStorage.setItem("token_access", data.token_access);
 			localStorage.setItem("token_refresh", data.token_refresh);
 			alert("Autenticación Exitosa");
-			this.verifyAuth();
+			this.loadHome();
     },
 
     completedSignUp: function(data) {
@@ -87,17 +89,16 @@ export default {
 			this.$router.push({ name: "account" });
 		},
 
+    loadTransaction: function() {
+      this.$router.push({ name: "transaction"})
+    },
+
     logOut: function () {
 			localStorage.clear();
 			alert("Sesión Cerrada");
-			this.verifyAuth();
+			this.loadLogIn();
 		},
   },
-
-  created: function(){
-    this.verifyAuth()
-  }
-
 }
 </script>
 
@@ -116,7 +117,7 @@ export default {
     margin: 0%;
     padding: 0;
     width: 100%;
-    height: 10vh; 
+    /* height: 10vh;  */
     min-height: 100px;
 
     background-color: #283747 ;
@@ -134,12 +135,12 @@ export default {
 
   .header nav {
     height: 100%;
-    width: 20%;
+    width: 30%;
 
     display: flex;
     justify-content: space-around;
     align-items: center;
-
+    flex-wrap: wrap;
     font-size: 20px;
   }
 
@@ -150,6 +151,7 @@ export default {
 
     border-radius: 5px;
     padding: 10px 20px;
+    margin: 2px;
   }
 
   .header nav button:hover{
@@ -160,11 +162,14 @@ export default {
 
   
   .main-component{
-    height: 75vh;
+    min-height: 75vh;
     margin: 0%;
     padding: 0%;
 
     background: #FDFEFE ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
  
