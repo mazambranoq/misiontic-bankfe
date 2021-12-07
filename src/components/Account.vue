@@ -21,13 +21,13 @@
     <div class="container-table">
       <table>
         <tr>
-          <th>Fecha</th>
+          <th @click='sort("date")'>{{sortBy == 'date'? '*' : '' }}Fecha</th>
           <th>Hora</th>
-          <th>Origen</th>
-          <th>Destino</th>
-          <th>Valor</th>
+          <th @click="sort('usernameOrigin')"> {{sortBy == 'usernameOrigin'? '*' : '' }}Origen</th>
+          <th @click="sort('usernameDestiny')">{{sortBy == 'usernameDestiny'? '*' : '' }}Destino</th>
+          <th @click="sort('value')">{{sortBy == 'value'? '*' : '' }}Valor</th>
         </tr>
-        <tr v-for="transaction in transactionByUsername" :key="transaction.id">
+        <tr v-for="transaction in sortedTransactions" :key="transaction.id">
           <td>{{ transaction.date.substring(0, 10) }}</td>
           <td>{{ transaction.date.substring(11, 19) }}</td>
           <td>{{ transaction.usernameOrigin }}</td>
@@ -54,7 +54,22 @@ export default {
         balance: "",
         lastChange: "",
       },
+      sortBy: "date",
+      sortOrder: -1
     };
+  },
+
+  computed:{
+    sortedTransactions(){
+      let transactions = [...this.transactionByUsername]
+            .sort((a,b) => {
+              if(a[this.sortBy] >= b[this.sortBy])
+                return this.sortOrder
+              else 
+                return -this.sortOrder
+            })
+      return transactions
+    }
   },
 
   apollo: {
@@ -92,7 +107,14 @@ export default {
       }
     },
   },
-
+  methods:{
+    sort(field){
+      if(this.sortBy == field)
+        this.sortOrder = -this.sortOrder
+      else
+        this.sortBy = field;
+    }
+  },
   created: function () {
       this.$apollo.queries.transactionByUsername.refetch();
       this.$apollo.queries.accountByUsername.refetch();

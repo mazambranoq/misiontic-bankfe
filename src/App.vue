@@ -39,12 +39,6 @@
 export default {
   name: 'App',
 
-  data: function(){
-      return{
-        is_auth: false
-      }
-  },
-
   computed: {
     is_auth: {
       get: function(){
